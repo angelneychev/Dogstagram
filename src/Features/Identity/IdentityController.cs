@@ -1,8 +1,9 @@
-namespace Dogstagram.Features.Identity
+﻿namespace Dogstagram.Features.Identity
 {
     using System.Threading.Tasks;
 
     using Dogstagram.Data.Model;
+    using Dogstagram.Features.Identity.Models;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
@@ -14,9 +15,10 @@ namespace Dogstagram.Features.Identity
         private readonly IIdentityService identityService;
         private readonly AppSettings appSettings;
 
-        public IdentityController(UserManager<User> userManager,
-          IIdentityService identityService,
-          IOptions<AppSettings> appSettings)
+        public IdentityController(
+            UserManager<User> userManager,
+            IIdentityService identityService,
+            IOptions<AppSettings> appSettings)
         {
             this.userManager = userManager;
             this.identityService = identityService;
@@ -27,7 +29,7 @@ namespace Dogstagram.Features.Identity
         [Route(nameof(Register))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Register(RegisterUserRequestModel model)
+        public async Task<IActionResult> Register(RegisterUserRequestModel model)
         {
             var user = new User()
             {

@@ -1,4 +1,4 @@
-namespace Dogstagram.Infrastructure
+namespace Dogstagram.Infrastructure.Extensions
 {
     using Dogstagram.Data;
     using Microsoft.AspNetCore.Builder;

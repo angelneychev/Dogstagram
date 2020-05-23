@@ -1,4 +1,4 @@
-namespace Dogstagram.Features.Identity
+﻿namespace Dogstagram.Features.Identity
 {
   public interface IIdentityService
   {

@@ -1,4 +1,4 @@
-namespace Dogstagram.Data
+﻿namespace Dogstagram.Data
 {
     using Dogstagram.Data.Model;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;

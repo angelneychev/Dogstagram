@@ -1,7 +1,4 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-
-namespace Dogstagram.Infrastructure
+﻿namespace Dogstagram.Infrastructure.Extensions
 {
     using System.Text;
 
@@ -9,11 +6,14 @@ namespace Dogstagram.Infrastructure
     using Dogstagram.Data.Model;
     using Dogstagram.Features.Dogs;
     using Dogstagram.Features.Identity;
+    using Dogstagram.Infrastructure.Filters;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
+    using Microsoft.OpenApi.Models;
 
     public static class ServiceCollectionExtensions
     {
@@ -88,7 +88,13 @@ namespace Dogstagram.Infrastructure
               new OpenApiInfo
               {
                 Title = "My Dogstagram API",
-                Version = "v1"
+                Version = "v1",
               }));
-    }
+
+      public static void AddApiController(this IServiceCollection service)
+      => service
+        .AddControllers(options => options
+          .Filters
+          .Add<ModelOrNotFoundActionFilter>());
+  }
 }

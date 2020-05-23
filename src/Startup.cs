@@ -1,10 +1,8 @@
 namespace Dogstagram
 {
-  using Dogstagram.Data;
-  using Dogstagram.Infrastructure;
+  using Dogstagram.Infrastructure.Extensions;
   using Microsoft.AspNetCore.Builder;
   using Microsoft.AspNetCore.Hosting;
-  using Microsoft.EntityFrameworkCore;
   using Microsoft.Extensions.Configuration;
   using Microsoft.Extensions.DependencyInjection;
   using Microsoft.Extensions.Hosting;
@@ -26,7 +24,7 @@ namespace Dogstagram
         .AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))
         .AddApplicationServices()
         .AddSwagger()
-        .AddControllers();
+        .AddApiController();
 
     public void Configure(
       IApplicationBuilder app,

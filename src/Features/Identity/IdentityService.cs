@@ -1,4 +1,4 @@
-namespace Dogstagram.Features.Identity
+﻿namespace Dogstagram.Features.Identity
 {
     using System;
     using System.IdentityModel.Tokens.Jwt;
@@ -7,31 +7,31 @@ namespace Dogstagram.Features.Identity
 
     using Microsoft.IdentityModel.Tokens;
 
-  public class IdentityService : IIdentityService
-  {
-    public string GenerateJwtToken(string userId, string userName, string secret)
+    public class IdentityService : IIdentityService
     {
-      var tokenHandler = new JwtSecurityTokenHandler();
-      var key = Encoding.ASCII.GetBytes(secret);
-
-      var tokenDescriptor = new SecurityTokenDescriptor
+      public string GenerateJwtToken(string userId, string userName, string secret)
       {
-        Subject = new ClaimsIdentity(new[]
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.ASCII.GetBytes(secret);
+
+        var tokenDescriptor = new SecurityTokenDescriptor
         {
-          new Claim(ClaimTypes.NameIdentifier, userId),
-          new Claim(ClaimTypes.Name, userName),
-        }),
+          Subject = new ClaimsIdentity(new[]
+          {
+            new Claim(ClaimTypes.NameIdentifier, userId),
+            new Claim(ClaimTypes.Name, userName),
+          }),
 
-        Expires = DateTime.UtcNow.AddDays(7),
-        SigningCredentials = new SigningCredentials(
-          new SymmetricSecurityKey(key),
-          SecurityAlgorithms.HmacSha256Signature),
-      };
+          Expires = DateTime.UtcNow.AddDays(7),
+          SigningCredentials = new SigningCredentials(
+            new SymmetricSecurityKey(key),
+            SecurityAlgorithms.HmacSha256Signature),
+        };
 
-      var token = tokenHandler.CreateToken(tokenDescriptor);
-      var encryptedToken = tokenHandler.WriteToken(token);
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        var encryptedToken = tokenHandler.WriteToken(token);
 
-      return encryptedToken;
+        return encryptedToken;
+      }
     }
-  }
 }

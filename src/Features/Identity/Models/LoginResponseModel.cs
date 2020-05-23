@@ -1,4 +1,4 @@
-namespace Dogstagram.Features.Identity
+﻿namespace Dogstagram.Features.Identity.Models
 {
   public class LoginResponseModel
   {

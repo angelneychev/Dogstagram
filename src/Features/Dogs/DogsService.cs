@@ -1,42 +1,58 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Dogstagram.Data;
-using Dogstagram.Data.Model;
-using Microsoft.EntityFrameworkCore;
-
-namespace Dogstagram.Features.Dogs
+﻿namespace Dogstagram.Features.Dogs
 {
-  public class DogsService : IDogsService
-  {
-    private readonly DogstagramDbContext data;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
 
-    public DogsService(DogstagramDbContext data) => this.data = data;
+    using Dogstagram.Data;
+    using Dogstagram.Data.Model;
+    using Dogstagram.Features.Dogs.Models;
+    using Microsoft.EntityFrameworkCore;
 
-    public async Task<int> Create(string imagesUrl, string description, string userId)
+    public class DogsService : IDogsService
     {
-      var dog = new Dog()
+      private readonly DogstagramDbContext data;
+
+      public DogsService(DogstagramDbContext data) => this.data = data;
+
+      public async Task<int> Create(string imagesUrl, string description, string userId)
       {
-        ImagesUrl = imagesUrl,
-        Description = description,
-        UserId = userId,
-      };
+        var dog = new Dog()
+        {
+          ImagesUrl = imagesUrl,
+          Description = description,
+          UserId = userId,
+        };
 
-      this.data.Add(dog);
+        this.data.Add(dog);
 
-      return dog.Id;
-    }
+        return dog.Id;
+      }
 
-    public async Task<IEnumerable<DogListingResponseModel>> ByUser(string userId)
+      public async Task<IEnumerable<DogListingServiceModel>> ByUser(string userId)
       => await this.data
         .Dogs
         .Where(d => d.UserId == userId)
         .Select(
-          d => new DogListingResponseModel
+          d => new DogListingServiceModel
           {
             Id = d.Id,
-            ImagesUrl = d.ImagesUrl
+            ImagesUrl = d.ImagesUrl,
           })
         .ToListAsync();
+
+      public async Task<DogDetailsServiceModel> Details(int id)
+      => await this.data
+        .Dogs
+        .Where(d => d.Id == id)
+        .Select(d => new DogDetailsServiceModel
+        {
+          Id = d.Id,
+          ImagesUrl = d.ImagesUrl,
+          Description = d.Description,
+          UserId = d.UserId,
+          UserName = d.User.UserName,
+        })
+        .FirstOrDefaultAsync();
   }
 }

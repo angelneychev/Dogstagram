@@ -1,4 +1,4 @@
-namespace Dogstagram.Data
+﻿namespace Dogstagram.Data
 {
   public class Validation
   {
