@@ -9,6 +9,8 @@ namespace Dogstagram.Features.Dogs
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
+    using static Infrastructure.WebContstants;
+
     [Authorize]
     public class DogsController : ApiController
     {
@@ -27,12 +29,13 @@ namespace Dogstagram.Features.Dogs
       }
 
       [HttpGet]
+      [Route(Id)]
       public async Task<ActionResult<DogDetailsServiceModel>> Details(int id)
       => await this.dogsService.Details(id);
 
       [HttpPost]
       [ProducesResponseType(StatusCodes.Status201Created)]
-      public async Task<IActionResult> Create(CreateDogsResponseModel model)
+      public async Task<IActionResult> Create(CreateDogsRequestModel model)
       {
         var userId = this.User.GetId();
 
@@ -43,5 +46,38 @@ namespace Dogstagram.Features.Dogs
 
         return this.Created(nameof(this.Create), id);
       }
-    }
+
+      [HttpPut]
+      public async Task<ActionResult> Update(UpdateDogsRequestModel model)
+      {
+        var userId = this.User.GetId();
+
+        var update = await this.dogsService.Update(
+          model.Id,
+          model.Description,
+          userId);
+        if (!update)
+        {
+          return this.BadRequest();
+        }
+
+        return this.Ok();
+      }
+
+      [HttpDelete]
+      [Route(Id)]
+      public async Task<ActionResult> Delete(int id)
+      {
+        var userId = this.User.GetId();
+
+        var delete = await this.dogsService.Delete(id, userId);
+
+        if (!delete)
+        {
+          return this.BadRequest();
+        }
+
+        return this.Ok();
+      }
+  }
 }

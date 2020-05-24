@@ -1,10 +1,10 @@
-﻿namespace Dogstagram.Features.Dogs.Models
+namespace Dogstagram.Features.Dogs.Models
 {
   using System.ComponentModel.DataAnnotations;
 
   using static Data.Validation.Dog;
 
-  public class CreateDogsResponseModel
+  public class CreateDogsRequestModel
   {
     [Required]
     public string ImagesUrl { get; set; }

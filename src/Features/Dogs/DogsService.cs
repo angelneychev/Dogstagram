@@ -1,4 +1,4 @@
-﻿namespace Dogstagram.Features.Dogs
+namespace Dogstagram.Features.Dogs
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -29,6 +29,38 @@
         return dog.Id;
       }
 
+      public async Task<bool> Update(int id, string description, string userId)
+      {
+        var dog = await this.GetByIdAndUserId(id, userId);
+
+        if (dog == null)
+        {
+          return false;
+        }
+
+        dog.Description = description;
+
+        await this.data.SaveChangesAsync();
+
+        return true;
+      }
+
+      public async Task<bool> Delete(int id, string userId)
+      {
+        var dog = await this.GetByIdAndUserId(id, userId);
+
+        if (dog == null)
+        {
+          return false;
+        }
+
+        this.data.Dogs.Remove(dog);
+
+        await this.data.SaveChangesAsync();
+
+        return true;
+      }
+
       public async Task<IEnumerable<DogListingServiceModel>> ByUser(string userId)
       => await this.data
         .Dogs
@@ -53,6 +85,12 @@
           UserId = d.UserId,
           UserName = d.User.UserName,
         })
+        .FirstOrDefaultAsync();
+
+      private async Task<Dog> GetByIdAndUserId(int id, string userId)
+      => await this.data
+        .Dogs
+        .Where(d => d.Id == id && d.UserId == userId)
         .FirstOrDefaultAsync();
   }
 }
